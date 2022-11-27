@@ -1,40 +1,23 @@
 package Day3;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Part1 {
 
-	public static void main(String[] args) {
-		File file = new File(".\\src\\Day3\\data.txt");
-		Scanner scan;
+	public static void main(String[] args) throws IOException {	
+		String path = ".\\src\\Day3\\data.txt";
 		
-		try {
-			 scan = new Scanner(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println("File is not found");
-			return;
-		}
-		
-		List<String> data = new ArrayList<>();
-		
-		while (scan.hasNextLine()) {
-			data.add(scan.nextLine());
-		}
-		
-		scan.close();
+		final String[] arr = Files.readString(Path.of(path)).lines().toArray(String[]::new);
 
-		String gamma = "";
-		String epsilon = "";
-		for (int i=0; i<data.get(0).length(); i++) {
+		int gamma = 0;
+		int epsilon = 0;
+		for (int i=0; i<arr[0].length(); i++) {
 			int counter1 = 0;
 			int counter0 = 0;
-			for (int j=0; j<data.size(); j++) {
-				if (data.get(j).charAt(i) == '1') {
+			for (int j=0; j<arr.length; j++) {
+				if (arr[j].charAt(i) == '1') {
 					counter1++;
 				} else {
 					counter0++;
@@ -42,18 +25,15 @@ public class Part1 {
 			}
 			
 			if (counter1>counter0) {
-				gamma = gamma + "1";
-				epsilon = epsilon + "0";
+				gamma = (gamma << 1) + 1;
+				epsilon = epsilon << 1;
 			} else {
-				gamma = gamma + "0";
-				epsilon = epsilon + "1";
+				gamma = gamma << 1;
+				epsilon = (epsilon << 1) + 1;
 			}
 		}
 		
-		int gammaDec = Integer.parseInt(gamma, 2);
-		int epsilonDec = Integer.parseInt(epsilon, 2);
-		
-		System.out.println(gammaDec * epsilonDec);
+		System.out.println(gamma * epsilon);
 		
 	}
 

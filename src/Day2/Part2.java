@@ -2,58 +2,43 @@ package Day2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Part2 {
 
-	public static void main(String[] args) {
-		File file = new File(".\\src\\Day2\\data.txt");
-		Scanner scan;
+	public static void main(String[] args) throws IOException {
+		String path = ".\\src\\Day2\\data.txt";
 		
-		try {
-			 scan = new Scanner(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println("File is not found");
-			return;
-		}
-		
-		List<String> data = new ArrayList<>();
-		
-		while (scan.hasNextLine()) {
-			data.add(scan.nextLine());
-		}
+		final String[] arr = Files.readString(Path.of(path)).lines().toArray(String[]::new);
 		
 		int hor = 0;
 		int depth = 0;
 		int aim = 0;
-		for (int i=0; i<data.size(); i++) {
-			String[] splitted = data.get(i).split(" ");
+		for (int i=0; i<arr.length; i++) {
+			String[] splitted = arr[i].split(" ");
 			
 			int value = Integer.parseInt(splitted[1]);
 			switch (splitted[0]) {
-				case "forward":
+				case "forward" -> {
 					hor += value;
 					depth += aim * value;
-					break;
-				case "down":
-					aim += value;
-					break;
-				case "up":
-					aim -= value;
-					break;
-				default:
+				}
+				case "down" -> aim += value;
+				case "up" -> aim -= value;
+				default -> {
 					System.out.println("error!");
 					return;
+				}
 			}
 					
 		}
 		
 		System.out.println(hor * depth);
-		
-		scan.close();
 	}
 
 }
