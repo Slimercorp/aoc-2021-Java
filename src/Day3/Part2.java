@@ -1,36 +1,22 @@
 package Day3;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Part2 {
 
-	public static void main(String[] args) {
-		File file = new File(".\\src\\Day3\\data.txt");
-		Scanner scan;
+	public static void main(String[] args) throws IOException {
+		String path = ".\\src\\Day3\\data.txt";
 		
-		try {
-			 scan = new Scanner(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println("File is not found");
-			return;
-		}
-		
-		List<String> data = new ArrayList<>();
-		
-		while (scan.hasNextLine()) {
-			data.add(scan.nextLine());
-		}
-		
-		scan.close();
+		final String[] arr = Files.readString(Path.of(path)).lines().toArray(String[]::new);
 
 		// oxygen generator rating
 		int oxygen = 0;
-		List<String> dataTemp = new ArrayList<>(data);
+		List<String> dataTemp = new ArrayList<>(Arrays.asList(arr));
 		for (int i=0; i<dataTemp.get(0).length(); i++) {
 			int counter1 = 0;
 			int counter0 = 0;
@@ -42,7 +28,7 @@ public class Part2 {
 				}
 			}
 			
-			if ((counter1 > counter0) || (counter1 == counter0)) { //удаляем тех у кого 0 в начале
+			if (counter1 >= counter0) { //удаляем тех у кого 0 в начале
 				deleteElements(dataTemp, i, '0');
 			} else { //удаляем тех у кого 1 в начале
 				deleteElements(dataTemp, i, '1');
@@ -57,7 +43,7 @@ public class Part2 {
 		
 		// CO2 scrubber rating
 		int co2 = 0;
-		dataTemp = new ArrayList<>(data);
+		dataTemp = new ArrayList<>(Arrays.asList(arr));
 		for (int i=0; i<dataTemp.get(0).length(); i++) {
 			int counter1 = 0;
 			int counter0 = 0;
